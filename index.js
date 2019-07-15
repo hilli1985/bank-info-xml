@@ -2,7 +2,8 @@ const express = require('express')
 const app = express()
 const path = require('path');
 const bodyParser = require('body-parser');
-const port = 8080
+const consts = require('./consts')
+const port = consts.port
 const fetchDatafromApi = require('./api/fetchAPI')
 const { getAutoComplete, getBranchListByBankCode, getInfoByBranchandBankCode } = require('./api/lib')
 let fetchedData;

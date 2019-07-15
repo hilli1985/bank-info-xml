@@ -1,6 +1,6 @@
 const convert = require('xml-js');
 const axios = require('axios')
-const consts = require('./consts')
+const consts = require('../consts')
 
 const fetchDatafromApi = async () => {
   try {
