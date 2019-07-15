@@ -15,9 +15,9 @@ const getBranchListByBankCode = (fetchedData, bankCode) => {
     return branchList.map(branch => branch['Branch_Code']._text);
 }
 
-const getInfoByBranchandBankCode = (fetchedData, bankCode, branchCode) => {
+const getInfoByBranchAndBankCode = (fetchedData, bankCode, branchCode) => {
     const branchInfo = fetchedData.filter(branch => (branch['Bank_Code']._text === bankCode) && (branch['Branch_Code']._text === branchCode))[0];
     return branchInfo;
 }
 
-module.exports = { getAutoComplete, getBranchListByBankCode, getInfoByBranchandBankCode };
+module.exports = { getAutoComplete, getBranchListByBankCode, getInfoByBranchAndBankCode };

@@ -4,12 +4,12 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const consts = require('./consts')
 const port = consts.port
-const fetchDatafromApi = require('./api/fetchAPI')
-const { getAutoComplete, getBranchListByBankCode, getInfoByBranchandBankCode } = require('./api/lib')
+const fetchDataFromApi = require('./api/fetchAPI')
+const { getAutoComplete, getBranchListByBankCode, getInfoByBranchAndBankCode } = require('./api/lib')
 let fetchedData;
 
 const initializeData = async () => {
-    fetchedData = await fetchDatafromApi()
+    fetchedData = await fetchDataFromApi()
 }
 initializeData();
 
@@ -37,14 +37,14 @@ app.get('/apiBank/all', (req, res) => {
     res.send({ data: fetchedData })
 })
 
-//http://localhost:8080/apiBank/autocomplete/אגוד
-app.get('/apiBank/autocomplete/:query', (req, res) => {
-    const { query } = req.params
+//http://localhost:8080/apiBank/autocomplete?query=אגוד
+app.get('/apiBank/autocomplete', (req, res) => {
+    const { query } = req.query
     res.send({ data: getAutoComplete(fetchedData, query) })
 })
 
-//http://localhost:8080/apiBank/branchList/PARAMS?bankCode=52
-app.get('/apiBank/branchList/PARAMS', (req, res) => {
+//http://localhost:8080/apiBank/branchList?bankCode=52
+app.get('/apiBank/branchList', (req, res) => {
     const { bankCode } = req.query
     if (parseInt(bankCode) > 0) {
         res.send({ data: getBranchListByBankCode(fetchedData, bankCode) })
@@ -54,14 +54,12 @@ app.get('/apiBank/branchList/PARAMS', (req, res) => {
     }
 })
 
-//http://localhost:8080/apiBank/branchInfo/PARAMS?bankCode=52&&branchCode=176
-app.get('/apiBank/branchInfo/PARAMS', (req, res) => {
+//http://localhost:8080/apiBank/branchInfo?bankCode=52&&branchCode=176
+app.get('/apiBank/branchInfo', (req, res) => {
     const { bankCode, branchCode } = req.query
-    const info = getInfoByBranchandBankCode(fetchedData, bankCode, branchCode)
+    const info = getInfoByBranchAndBankCode(fetchedData, bankCode, branchCode)
     res.send({ data: info })
 })
-
-
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
