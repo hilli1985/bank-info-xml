@@ -1,12 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<title>Bank API</title>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="./script.js" type="module"></script>
 </head>
+
 <body>
+    <div class="jumbotron text-center">
+        <h1>Bank Information</h1>
+    </div>
 
-<h1>Bank API</h1>
-<p>This is a paragraph.</p>
-
+    <div class="container">
+        <div class="row">
+            <div id="branchInfo" class="col-sm-8">
+            </div>
+            <div class="col-sm-4">
+                <h3 class="row-headline">מצא סניף</h3>
+                <form class="row-headline">
+                    שם הבנק<br />
+                    <input id="bankNameInput" type="text" name="bankName" placeholder="הקלד..." />
+                    <br />
+                    <div id="autoComplete">auto</div>
+                    <br />
+                    מספר סניף<br />
+                    <input type="text" id="branchCodeInput" name="branchNumber" placeholder="בחר" />
+                    <br /><br />
+                    <input  id="btnSubmit" type="button" value="חפש" />
+                </form>
+            </div>
+            <div class="col-sm-8">
+                <!-- Google Map Window -->
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

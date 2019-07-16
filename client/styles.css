@@ -1,0 +1,49 @@
+body {
+  background-color: #E2BAE6;
+  color: #551031;
+}
+h1 {
+  color: #551031;
+}
+h3 {
+  color: #551031;
+  font-weight: bold;
+}
+
+p {
+  color: #12283D;
+}
+.row-headline {
+  direction: rtl;
+  font-weight: bold;
+}
+.bank-info {
+  direction: rtl;
+  padding: 2%;
+  padding-right: 3%;
+  margin-bottom: 1%;
+  background: #F4F4F4;
+  border-radius: 50px 15px;
+  box-shadow: 3px 5px #c3c3c3;
+}
+.h-bank-info{
+  color: #551031;
+  font-weight: bold;
+  background: #F4F4F4;
+  border-bottom:1px solid #12283D;
+  direction: rtl;
+  width:auto;
+  display: table;
+  padding: 2px;
+  margin: 2px;
+}
+.h-field-bank-info {
+  /* border-bottom:1px solid #12283D; */
+  width:auto;
+  display: table;
+  /* background: #F4F4F4; */
+  padding: 2px;
+  margin: 2px;
+  font-weight: bold;
+  display: inline-block;
+}
