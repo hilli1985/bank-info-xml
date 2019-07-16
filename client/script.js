@@ -25,7 +25,7 @@ const infoKeys = {
 
 // variables
 let input = document.getElementById('input');
-//let people = ['john doe', 'maria', 'paul', 'george', 'jimmy'];
+// let people = ['john doe', 'maria', 'paul', 'george', 'jimmy'];
 let people = [];
 
 
@@ -57,8 +57,8 @@ li.setAttribute("onclick", "valid;");
 
 // events
 input.onkeyup = async function (e) {
-    people = await getInput(e);
-    console.log(people)
+    console.log('onkeyup');
+    await getInput(e);
     let input_val = this.value; // updates the variable on each ocurrence
     if (input_val.length === 0) {
         let autocomplete_results = document.getElementById("autocomplete-results");
@@ -111,7 +111,8 @@ async function getInput(e) {
         autocompleteArr = await getAutocomplete(e.target.value);
         console.log('autocompleteArr', autocompleteArr.data)
         // return autocompleteArr;
-        // people = autocompleteArr;
+        people = autocompleteArr.data;
+        console.log(people)
         // const branchList = await getBranchList(13)
         // console.log('branchList', branchList)
     }, 2000);
