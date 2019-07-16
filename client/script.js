@@ -29,22 +29,13 @@ let input = document.getElementById('input');
 let people = [];
 
 
-function myFunc(str) {
-    console.log(str)
-    alert('You clicked me');
-}
-
-// functions
-function autocomplete(val) {
-    let people_return = [];
-
-    for (let i = 0; i < people.length; i++) {
-        if (val === people[i].slice(0, val.length)) {
-            people_return.push(people[i]);
-        }
-    }
-
-    return people_return;
+async function myFunc(code) {
+    console.log(code)
+    const branchList = await getBranchList(code)
+    console.log('branchList', branchList)
+    console.log('people', people)
+    let name = people.filter (p => p['Bank_Code'] == code)[0]['Bank_Name']
+    input.value = (name);
 }
 
 const li = document.createElement('li');
@@ -54,12 +45,14 @@ li.className = "client-class";
 li.setAttribute("onclick", "valid;");
 
 
-
 // events
 input.onkeyup = async function (e) {
-    console.log('onkeyup');
-    await getInput(e);
-    let input_val = this.value; // updates the variable on each ocurrence
+    console.log('onkeyup', e.target.value);
+    await getInput(e)
+}
+
+async function updateUI(e) {
+    let input_val = e.target.value; // updates the variable on each ocurrence
     if (input_val.length === 0) {
         let autocomplete_results = document.getElementById("autocomplete-results");
         autocomplete_results.innerHTML = '';
@@ -69,10 +62,12 @@ input.onkeyup = async function (e) {
 
         let autocomplete_results = document.getElementById("autocomplete-results");
         autocomplete_results.innerHTML = '';
-        people_to_show = autocomplete(input_val);
+        people_to_show = people;
 
         for (let i = 0; i < people_to_show.length; i++) {
-            autocomplete_results.innerHTML += `<li class="list-element" onclick="myFunc( ${i})" > ${people_to_show[i]['Bank_Name']}</li>`;
+            let code = people_to_show[i]['Bank_Code'];
+            let name = people_to_show[i]['Bank_Name'];
+            autocomplete_results.innerHTML += `<li class="list-element" onclick="myFunc( ${code} )" > ${name}</li>`;
         }
         autocomplete_results.style.display = 'block';
     } else {
@@ -82,7 +77,7 @@ input.onkeyup = async function (e) {
 }
 
 async function clickHandler() {
-    const response = await getBranchInfo(13, branchCodeInput.value);
+    const response = await getBranchInfo(46, branchCodeInput.value);
     let str = '';
     str = `<h3 class="h-bank-info">${response.data['Branch_Name']._text} (${response.data['Branch_Code']._text})</h3>`;
     str = str + `<h4 class="h-bank-info">${response.data['Bank_Name']._text}</h4>`;
@@ -109,13 +104,9 @@ async function getInput(e) {
     timeout = setTimeout(async function () {
         console.log('Input Value:', e.target.value);
         autocompleteArr = await getAutocomplete(e.target.value);
-        console.log('autocompleteArr', autocompleteArr.data)
-        // return autocompleteArr;
         people = autocompleteArr.data;
-        console.log(people)
-        // const branchList = await getBranchList(13)
-        // console.log('branchList', branchList)
-    }, 2000);
+        updateUI(e)
+    }, 1000);
 };
 
 document.getElementById('btnSubmit').onclick = clickHandler;
