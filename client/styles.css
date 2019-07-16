@@ -47,3 +47,8 @@ p {
   font-weight: bold;
   display: inline-block;
 }
+.list-element {
+  border:1px solid #F4F4F4;
+  display: block;
+  width:54%;
+}

@@ -20,20 +20,27 @@
 
     <div class="container">
         <div class="row">
+
             <div id="branchInfo" class="col-sm-8">
             </div>
+
             <div class="col-sm-4">
-                <h3 class="row-headline">מצא סניף</h3>
+                <!-- <div id="autocomplete-container" > -->
+
+                <!-- </div> -->
+                <h3 class="row-headline">איתור סניף</h3>
                 <form class="row-headline">
                     שם הבנק<br />
-                    <input id="bankNameInput" type="text" name="bankName" placeholder="הקלד..." />
+                    <input type="text" autofocus="true" name="autofocus sample" placeholder="הקלד..."
+                        id="input"></input>
+                    <div id="autocomplete-results">
+                    </div>
                     <br />
-                    <div id="autoComplete">auto</div>
                     <br />
                     מספר סניף<br />
                     <input type="text" id="branchCodeInput" name="branchNumber" placeholder="בחר" />
                     <br /><br />
-                    <input  id="btnSubmit" type="button" value="חפש" />
+                    <input id="btnSubmit" type="button" value="חפש" />
                 </form>
             </div>
             <div class="col-sm-8">
