@@ -1,83 +1,52 @@
 import { getAutocomplete, getBranchInfo, getBranchList } from './api/lib.js';
-const bankNameInput = document.getElementById('bankNameInput');
-const branchCodeInput = document.getElementById('branchCodeInput');
-const brachInfo = document.getElementById('branchInfo');
-const autoComplete = document.getElementById('autoComplete');
-
-const infoKeys = {
-    Branch_Name: 'שם סניף',
-    Bank_Name: 'שם בנק',
-    Bank_Code: 'קוד בנק',
-    Branch_Code: 'קוד סניף',
-    Branch_Address: 'כתובת הסניף',
-    City: 'עיר',
-    Zip_Code: 'מיקוד',
-    POB: 'ת.ד',
-    Telephone: 'טלפון',
-    Fax: 'פקס',
-    Free_Tel: 'חיוג מקוצר',
-    Handicap_Access: 'גישה לבעלי מוגבלות',
-    day_closed: 'ימים סגורים',
-    Branch_Type: 'סוג סניף',
-    // X_Coordinate:'lat',
-    // Y_Coordinate:'lan',
-}
+import { infoKeys } from './consts.js';
 
 // variables
-let input = document.getElementById('input');
-// let people = ['john doe', 'maria', 'paul', 'george', 'jimmy'];
-let people = [];
+const bankNameInput = document.getElementById('bank-name-input');
+const branchCodeInput = document.getElementById('branch-code-input');
+const brachInfo = document.getElementById('branch-info');
+const autocompleteResults = document.getElementById('autocomplete-results');
+const searchBtn = document.getElementById('btn-submit');
 
+let timeout = null;
+let banksToShow = [];
+let currentBankCode = 0;
 
-async function myFunc(code) {
-    console.log(code)
-    const branchList = await getBranchList(code)
-    console.log('branchList', branchList)
-    console.log('people', people)
-    let name = people.filter (p => p['Bank_Code'] == code)[0]['Bank_Name']
-    input.value = (name);
+async function selectBankCode(bankCode) {
+    const branchList = await getBranchList(bankCode);
+    currentBankCode = bankCode;
+    bankNameInput.value = banksToShow.filter(p => p['Bank_Code'] == bankCode)[0]['Bank_Name'];
+    autocompleteResults.innerHTML = '';
+    let res = renderBranches(branchList.data);
+    branchCodeInput.innerHTML = `<select class="select-branch" id="select-branch-id"><option>בחר סניף רצוי מהרשימה</option>${res}</select>`;
 }
 
-const li = document.createElement('li');
-li.innerText = "client";
-li.id = "key";
-li.className = "client-class";
-li.setAttribute("onclick", "valid;");
-
-
-// events
-input.onkeyup = async function (e) {
-    console.log('onkeyup', e.target.value);
-    await getInput(e)
+function renderBranches(branchList) {
+    return branchList.map(o => `<option value="${o}">${o}</option>`).join('');
 }
 
-async function updateUI(e) {
+async function renderAutoComplete(e) {
     let input_val = e.target.value; // updates the variable on each ocurrence
-    if (input_val.length === 0) {
-        let autocomplete_results = document.getElementById("autocomplete-results");
-        autocomplete_results.innerHTML = '';
-    }
-    else if (input_val.length > 0) {
-        let people_to_show = [];
-
-        let autocomplete_results = document.getElementById("autocomplete-results");
-        autocomplete_results.innerHTML = '';
-        people_to_show = people;
-
-        for (let i = 0; i < people_to_show.length; i++) {
-            let code = people_to_show[i]['Bank_Code'];
-            let name = people_to_show[i]['Bank_Name'];
-            autocomplete_results.innerHTML += `<li class="list-element" onclick="myFunc( ${code} )" > ${name}</li>`;
-        }
-        autocomplete_results.style.display = 'block';
+    if (input_val.length > 0) {
+        let autocompleteResults = document.getElementById("autocomplete-results");
+        autocompleteResults.innerHTML = '';
+        autocompleteResults.innerHTML = banksToShow.map(b => {
+            let code = b['Bank_Code'];
+            let name = b['Bank_Name'];
+            return `<li class="list-element" onclick="selectBankCode( ${code} )" > ${name}</li>`;
+        }).join('')
+        autocompleteResults.style.display = 'block';
     } else {
-        people_to_show = [];
-        autocomplete_results.innerHTML = '';
+        banksToShow = [];
+        autocompleteResults.innerHTML = '';
     }
 }
 
+// search btn clicked
 async function clickHandler() {
-    const response = await getBranchInfo(46, branchCodeInput.value);
+    const e = document.getElementById("select-branch-id");
+    const currentBranchCode = e.options[e.selectedIndex].value;
+    const response = await getBranchInfo(currentBankCode, currentBranchCode);
     let str = '';
     str = `<h3 class="h-bank-info">${response.data['Branch_Name']._text} (${response.data['Branch_Code']._text})</h3>`;
     str = str + `<h4 class="h-bank-info">${response.data['Bank_Name']._text}</h4>`;
@@ -86,29 +55,28 @@ async function clickHandler() {
             return ``
         }
         else {
-            return `<div><div class="h-field-bank-info" >${infoKeys[key]}</div>: ${response.data[key]._text}</div>`
+            let field = response.data[key]._text ? response.data[key]._text : 'אין נתונים בנושא זה'
+            return `<div><div class="h-field-bank-info" >${infoKeys[key]}</div>: ${field}</div>`
         }
     }).join('')
-    brachInfo.outerHTML = `<div id="bankInfo" class="col-sm-8 bank-info">${str}</div>`;
+    brachInfo.innerHTML = `<div id="branch-info" class="bank-info">${str}</div>`;
 }
 
-
-
-let timeout = null;
-
-
-async function getInput(e) {
+async function debounceAutoComlete(e) {
     e.preventDefault()
     clearTimeout(timeout);
     let autocompleteArr = [];
     timeout = setTimeout(async function () {
-        console.log('Input Value:', e.target.value);
         autocompleteArr = await getAutocomplete(e.target.value);
-        people = autocompleteArr.data;
-        updateUI(e)
+        banksToShow = autocompleteArr.data;
+        renderAutoComplete(e);
     }, 1000);
 };
 
-document.getElementById('btnSubmit').onclick = clickHandler;
-// document.getElementById('input').onkeyup = getInput;
-window.myFunc = myFunc
+// events
+bankNameInput.onkeyup = async function (e) {
+    await debounceAutoComlete(e);
+}
+searchBtn.onclick = clickHandler;
+
+window.selectBankCode = selectBankCode;

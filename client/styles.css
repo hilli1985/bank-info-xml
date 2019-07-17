@@ -9,7 +9,6 @@ h3 {
   color: #551031;
   font-weight: bold;
 }
-
 p {
   color: #12283D;
 }
@@ -20,7 +19,7 @@ p {
 .bank-info {
   direction: rtl;
   padding: 2%;
-  padding-right: 3%;
+  padding-right: 7%;
   margin-bottom: 1%;
   background: #F4F4F4;
   border-radius: 50px 15px;
@@ -38,10 +37,8 @@ p {
   margin: 2px;
 }
 .h-field-bank-info {
-  /* border-bottom:1px solid #12283D; */
   width:auto;
   display: table;
-  /* background: #F4F4F4; */
   padding: 2px;
   margin: 2px;
   font-weight: bold;
@@ -50,6 +47,23 @@ p {
 .list-element {
   border:1px solid #F4F4F4;
   display: block;
-  width:53.5%;
   padding: 2px;
 }
+.select-branch {
+    width:53.5%;
+    padding: 2px;
+}
+#autocomplete-results {
+   width:53.5%;
+  max-height: 146px;
+  overflow: auto;
+  margin-top:5px; 
+}
+#autocomplete-results-hidden {
+  border:1px solid #F4F4F4; 
+}
+#bank-name-input {
+  white-space: nowrap; 
+  text-overflow: ellipsis; 
+}
+
